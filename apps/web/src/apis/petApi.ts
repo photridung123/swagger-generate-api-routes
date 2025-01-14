@@ -1,5 +1,5 @@
 import { API, createFetchApi } from "@pkg/libs";
-import { PetRoutes } from "@pkg/types";
+import { PetRoutes } from "@pkg/types/src/services/PetRoute";
 import { BASE_URL } from "./constant";
 
 const petApiClient = new API(`${BASE_URL}/pet`, {
