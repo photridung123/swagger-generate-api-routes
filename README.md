@@ -1,6 +1,6 @@
 # Demo: Generating API Types from Swagger.json
 
-This project is built using a **mono-repo** structure managed with **pnpm**, where all the applications and packages are housed in a single repository. The project utilizes **Axios** for API requests and integrates **swagger-typescript-api** to automatically generate TypeScript types from a Swagger/OpenAPI specification, simplifying API integration and type safety.
+This project follows a **mono-repo** structure managed by **pnpm**. It uses **Axios** for API calls and **swagger-typescript-api** to auto-generate TypeScript types from Swagger specifications.
 
 ---
 
