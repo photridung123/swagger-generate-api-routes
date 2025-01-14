@@ -1,0 +1,30 @@
+<%
+const { route, utils, config } = it;
+const { _, pascalCase, require } = utils;
+const { raw, request, routeName, response } = route;
+const { query, payload, pathParams, headers, method } = request;
+
+const routeDocs = includeFile("./route-docs", { config, route, utils });
+const routeNamespace = pascalCase(routeName.usage);
+
+const paramsName = `${routeNamespace}Params`;
+
+const pathType = pathParams && pathParams.type || "{}"
+const paramsType = query ? `${paramsName} & ${pathType}` : pathType;
+
+const args = [];
+
+if (paramsType !== "{}") {
+  args.push(`params: ${paramsType}`);
+}
+
+if (payload) {
+  args.push(`payload: ${payload.type}`);
+}
+
+%>
+
+<%~ routeName.usage %>(<%~ args.join(", ") %>) {
+  const url = urlcat("<%~ raw.route %>", <%~ paramsType !== "{}" ? "params" : "{}" %>);
+  return api.<%~ method %><<%~ response.type %>>(url<%~ (payload && ", payload") || "" %>)
+},

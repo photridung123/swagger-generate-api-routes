@@ -1,0 +1,85 @@
+<%
+const { utils, config, route, modelTypes, contract } = it;
+const { _, pascalCase } = utils;
+const { routes, moduleName } = route;
+const dataContracts = config.modular ? _.map(modelTypes, "name") : [];
+
+const serviceName = pascalCase(moduleName + "Routes");
+
+const mappedRoutes = routes.reduce((mapped, route) => {
+    const {
+        namespace,
+        request: { requestParams, path, method, payload, pathParams },
+        responseBodyInfo: { responses }
+    } = route;
+
+    const newPath = path.replace(`/${namespace}`, "").replaceAll("$", "");
+    mapped[newPath] = mapped[newPath] || {};
+    
+    const newRoute = {
+        [method]: {
+            request: {},
+            responses: responses.reduce((mappedRes, response) => {
+                // if not success return
+                if (response.status < 200 || response.status > 299) {
+                    return mappedRes;
+                }
+                mappedRes[response.status] = response.status !== 204 ? response.type : undefined;
+                return mappedRes;
+            }, {})
+        }
+    }
+
+    if (pathParams) {
+        newRoute[method].request.path = {
+            type: pathParams.type,
+            required: !pathParams.optional
+        }
+    }
+    if (requestParams) {
+        newRoute[method].request.query = {
+            type: requestParams.type,
+            required: !requestParams.optional
+        }
+    }
+    if (payload) {
+        newRoute[method].request.body = {
+            type: payload.type,
+            required: !payload.optional
+        }
+    }
+
+    mapped[newPath] = {
+        ...mapped[newPath],
+        ...newRoute,
+    };
+
+    return mapped;
+}, {});
+
+%>
+<% if (dataContracts.length) { %>
+import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
+<% } %>
+
+export interface <%~ serviceName %> {
+    <% for (const path in mappedRoutes) { %>
+        "<%~ path %>": {
+            <% for (const method in mappedRoutes[path]) { %>
+                "<%~ method %>": {
+                    request: {
+                        <% for (const requestType in mappedRoutes[path][method].request) { %>
+                            <%~ requestType %><%~ !mappedRoutes[path][method].request[requestType].required ? "?" : "" %>: <%~ mappedRoutes[path][method].request[requestType].type ? mappedRoutes[path][method].request[requestType].type : "{}" %>,
+                        <% } %>
+                    },
+                    responses: {
+                        <% for (const status in mappedRoutes[path][method].responses) { %>
+                            "<%~ status %>": <%~ mappedRoutes[path][method].responses[status] %>,
+                        <% } %>
+                    }
+                },
+            <% } %>
+        },
+    <% } %>
+}
+

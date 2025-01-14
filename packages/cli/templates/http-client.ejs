@@ -1,0 +1,14 @@
+import { type AxiosRequestConfig } from "axios";
+
+export interface APIResult<T> {
+    data: T;
+    abort: () => void;
+}
+  
+export interface API {
+    get<T>(url: string, config?: AxiosRequestConfig): Promise<APIResult<T>>;
+    post<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<APIResult<T>>;
+    put<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<APIResult<T>>;
+    patch<T, D = any>(url: string, data?: D, config?: AxiosRequestConfig): Promise<APIResult<T>>;
+    delete<T>(url: string, config?: AxiosRequestConfig): Promise<APIResult<T>>;
+}

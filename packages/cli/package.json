@@ -1,0 +1,28 @@
+{
+  "name": "@pkg/cli",
+  "version": "1.0.0",
+  "description": "",
+  "source": "./src/index.ts",
+  "main": "./src/index.ts",
+  "type": "commonjs",
+  "bin": {
+    "cli": "./src/bootstrap.js"
+},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gen:types": "cli generate -o ../../packages/types/src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "dotenv": "^16.4.5",
+    "reflect-metadata": "^0.2.2",
+    "swagger-typescript-api": "^13.0.3",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.7"
+  }
+}

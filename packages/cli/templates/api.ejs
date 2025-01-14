@@ -1,0 +1,55 @@
+<%
+const { utils, config, route, modelTypes, contract } = it;
+const { _, pascalCase } = utils;
+const { routes, moduleName } = route;
+const dataContracts = config.modular ? _.map(modelTypes, "name") : [];
+
+const serviceName = pascalCase(moduleName + "Routes");
+
+// interface MappedRoutes {
+//     [url: string]: {
+//         [method: string]: {
+//             pathParams: {
+//                 type: string,
+//                 required: boolean
+//             },
+//             queryParams: {
+//                 type: string,
+//                 required: boolean
+//             },
+//             bodyParams: {
+//                 type: string,
+//                 required: boolean
+//             }
+//             responses: {
+//                 [code: string]: string;
+//             }
+//         }
+//     }
+// }
+
+// const mappedRoutes = routes.reduce((mapped, route) => {
+//     const { request, response } = route;
+//     const { requestParams, path, method, payload } = request;
+
+//     return mapped;
+// }, {})
+
+console.log(routes
+    // .filter(route => route.routeName.usage.includes("Sites"))
+    .filter(route => route.request.method === "post")
+    .map(route => route)
+);
+
+// console.log(mappedRoutes);
+
+%>
+<% if (dataContracts.length) { %>
+import { <%~ dataContracts.join(", ") %> } from "./<%~ config.fileNames.dataContracts %>"
+<% } %>
+
+export interface <%~ serviceName %> {
+    <% for (const route of routes) { %>
+        <%~ ""// includeFile('./procedure-call.ejs', { ...it, route }) %>
+    <% } %>
+}
