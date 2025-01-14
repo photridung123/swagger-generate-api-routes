@@ -1,0 +1,36 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pkg/cli": "workspace:*",
+    "@pkg/libs": "workspace:*",
+    "@pkg/types": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-json-view": "latest",
+    "@tanstack/react-query": "^5.59.15",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.7",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "autoprefixer": "^10.4.20",
+    "tailwindcss": "^3.4.14"
+  },
+  "files": [
+    "dist"
+  ]
+}
